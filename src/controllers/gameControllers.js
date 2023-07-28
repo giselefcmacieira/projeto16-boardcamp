@@ -10,3 +10,17 @@ export async function getGames (req, res){
         return res.status(500).send(err.message)
     }
 }
+
+export async function addGames (req, res){
+    //body: {name: 'Banco Imobiliário', image: 'http://www.imagem.com.br/jogo.jpg', stockTotal: 3, pricePerDay: 1500}
+    const {name, image, stockTotal, pricePerDay} = req.body;
+    //console.log(name, image, stockTotal, pricePerDay);
+    try{
+        await db.query(`INSERT INTO games (name, image, "stockTotal", "pricePerDay") 
+        VALUES ($1, $2, $3, $4);`, 
+        [name, image, stockTotal, pricePerDay])
+        return res.sendStatus(201)
+    }catch(err){
+        return response.status(500).send(err.message)
+    }
+}
