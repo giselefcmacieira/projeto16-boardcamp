@@ -32,7 +32,7 @@ export async function getCustomer (req, res){
             birthday: customer.birthday.toISOString().slice(0, 10)
         }
     });
-    return res.send(rightCustomer);
+    return res.send(rightCustomer[0]);
 }
 
 export async function addCustomer (req,res){
