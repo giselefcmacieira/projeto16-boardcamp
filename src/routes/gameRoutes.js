@@ -8,4 +8,5 @@ const gameRouter = Router();
 
 gameRouter.get("/games", getGames);
 gameRouter.post("/games", validateSchema(gameSchema), validateUnicGame, addGames);
+
 export default gameRouter;
