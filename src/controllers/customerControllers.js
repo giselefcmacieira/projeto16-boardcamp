@@ -23,7 +23,16 @@ export async function getCustomers (req, res){
 
 export async function getCustomer (req, res){
     const {customer} = res.locals;
-    return res.send(customer);
+    const rightCustomer = customer.rows.map(customer => {
+        return {
+            id: customer.id,
+            name: customer.name,
+            phone: customer.phone, 
+            cpf: customer.cpf,
+            birthday: customer.birthday.toISOString().slice(0, 10)
+        }
+    });
+    return res.send(rightCustomer);
 }
 
 export async function addCustomer (req,res){

@@ -14,7 +14,7 @@ export async function validateCustomerId (req, res, next){
         if(customer.rowCount === 0){
             return res.sendStatus(404)
         }
-        res.locals.customer = customer.rows;
+        res.locals.customer = customer;
         next();
     }catch(err){
         return res.status(500).send(err.message)
