@@ -5,7 +5,16 @@ import { db } from "../database/database.connection.js";
 export async function getCustomers (req, res){
     try{
         const customers = await db.query(`SELECT * FROM customers;`)
-        return res.send(customers.rows)
+        const rightCustomers = customers.rows.map(customer => {
+            return {
+                id: customer.id,
+                name: customer.name,
+                phone: customer.phone, 
+                cpf: customer.cpf,
+                birthday: customer.birthday.toISOString().slice(0, 10)
+            }
+        });
+        return res.send(rightCustomers)
     }catch(err){
         return res.status(500).send(err.message)
     }

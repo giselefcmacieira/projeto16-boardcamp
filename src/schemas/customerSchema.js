@@ -6,7 +6,7 @@ import Joi from "joi";
 const customerSchema = Joi.object({
     name: Joi.string().required(),
     phone: Joi.string().min(10).max(11).required(),
-    cpf: Joi.string().length(11).required(),
+    cpf: Joi.string().pattern(/^\d{10,11}$/, 'numbers').required(), //  /^\d{10,11}$/
     birthday: Joi.extend(JoiDate).date().format('YYYY-MM-DD').required()
 })
 
