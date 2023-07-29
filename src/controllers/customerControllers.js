@@ -13,13 +13,6 @@ export async function getCustomers (req, res){
 }
 
 export async function getCustomer (req, res){
-    const {id} = req.params
-    try{
-        const costumer = await db.query(`SELECT * FROM customers
-        WHERE id = $1`, 
-        [id])
-        return res.send(costumer.rows)
-    }catch(err){
-        return res.status(500).send(err.message)
-    }
+    const {customer} = res.locals;
+    return res.send(customer);
 }
