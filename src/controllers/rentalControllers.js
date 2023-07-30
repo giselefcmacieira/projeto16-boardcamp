@@ -79,7 +79,7 @@ export async function finishRental (req, res){
     try{
         await db.query(`UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE id = $3;`, [returnDate, delayFee, id]);
         console.log(delayFee);
-        return res.send(rental);
+        return res.sendStatus(200);
     }catch(err){
         return res.status(500).send(err.message)
     }
