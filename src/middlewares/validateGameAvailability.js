@@ -7,7 +7,7 @@ export async function validateGameAvailability (req, res, next){
     const {gameInfo} = res.locals; //{pricePerDay: 35, stockTotal: 3}
     const {gameId} = req.body;
     try{
-        const numberOfGamesRented = (await db.query(`SELECT id, "gameId" FROM rentals WHERE "gameId" = $1`, [gameId])).rowCount;
+        const numberOfGamesRented = (await db.query(`SELECT id, "gameId" FROM rentals WHERE "gameId" = $1 AND "returnDate" IS NULL`, [gameId])).rowCount;
         if(numberOfGamesRented >= gameInfo.stockTotal){
             return res.sendStatus(400)
         }

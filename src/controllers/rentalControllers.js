@@ -38,7 +38,7 @@ export async function getRentals (req, res){
     }
 }
 
-export async function addRental (req, res) {
+export async function addRental (req, res){
     //formato da tabela rentals: {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee}
     //body: {customerId: 1, gameId: 1, daysRented: 3}
     //rentDate: data atual no momento da inserção.
@@ -56,6 +56,30 @@ export async function addRental (req, res) {
             VALUES ($1, $2, $3, $4, $5, $6, $7);`, 
             [customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee])
         return res.sendStatus(201);
+    }catch(err){
+        return res.status(500).send(err.message)
+    }
+}
+
+export async function finishRental (req, res){
+    //formato da tabela rentals: {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee}
+    //body: {}
+    //params: {id: rentalId}
+    //UPDATE rentals SET "returnDate"='2023-07-30', "delayFee"=3000 WHERE id = 2;
+    const {rental} = res.locals //{rentDate: 2021-06-20T03:00:00.000Z, daysRented: 3, pricePerDay: 3500}
+    const {id} = req.params;
+    const returnDate = new Date();
+    const daysRented = rental.daysRented
+    const rentDays = Math.floor((Date.parse(returnDate) - Date.parse(rental.rentDate))/1000/60/60/24); //dias que o cliente ficou com o jogo
+    const pricePerDay = rental.pricePerDay;
+    let delayFee = 0;
+    if(rentDays > daysRented){
+        delayFee = pricePerDay * (rentDays - daysRented);
+    }
+    try{
+        await db.query(`UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE id = $3;`, [returnDate, delayFee, id]);
+        console.log(delayFee);
+        return res.send(rental);
     }catch(err){
         return res.status(500).send(err.message)
     }
