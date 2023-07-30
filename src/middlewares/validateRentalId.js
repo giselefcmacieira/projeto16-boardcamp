@@ -1,6 +1,6 @@
 import { db } from "../database/database.connection.js";
 
-export async function validateGameId (req, res, next){
+export async function validateRentalId (req, res, next){
     //formato da tabela rentals: {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee}
     //games: {id: 1, name: 'Banco Imobiliário', image: 'http://', stockTotal: 3, pricePerDay: 1500}
     //body: {}

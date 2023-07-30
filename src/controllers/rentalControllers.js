@@ -65,7 +65,6 @@ export async function finishRental (req, res){
     //formato da tabela rentals: {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee}
     //body: {}
     //params: {id: rentalId}
-    //UPDATE rentals SET "returnDate"='2023-07-30', "delayFee"=3000 WHERE id = 2;
     const {rental} = res.locals //{rentDate: 2021-06-20T03:00:00.000Z, daysRented: 3, pricePerDay: 3500}
     const {id} = req.params;
     const returnDate = new Date();
@@ -80,6 +79,19 @@ export async function finishRental (req, res){
         await db.query(`UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE id = $3;`, [returnDate, delayFee, id]);
         console.log(delayFee);
         return res.sendStatus(200);
+    }catch(err){
+        return res.status(500).send(err.message)
+    }
+}
+
+export async function deleteRental (req, res){
+    //DELETE FROM usuarios WHERE id = 2;
+    //formato da tabela rentals: {id, customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee}
+    //params: {id: rentalId}
+    const {id} = req.params
+    try{
+        await db.query(`DELETE FROM rentals WHERE id = $1`, [id])
+        return res.sendStatus(200)
     }catch(err){
         return res.status(500).send(err.message)
     }
